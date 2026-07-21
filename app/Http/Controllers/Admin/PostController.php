@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -12,19 +13,18 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::where('user_id', auth()->id())
-            ->with('category')
+        $posts = Post::with(['user','category'])
             ->latest()
             ->paginate(10);
 
-        return view('composer.posts.index', compact('posts'));
+        return view('admin.posts.index', compact('posts'));
     }
 
     public function create()
     {
         $categories = Category::orderBy('name')->get();
 
-        return view('composer.posts.create', compact('categories'));
+        return view('admin.posts.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -35,11 +35,12 @@ class PostController extends Controller
             'content'=>'required',
             'featured_image'=>'nullable|image|max:2048',
             'category_id'=>'required|exists:categories,id',
+            'status'=>'required'
         ]);
 
         $image = null;
 
-        if ($request->hasFile('featured_image')) {
+        if($request->hasFile('featured_image')){
             $image = $request->file('featured_image')
                 ->store('posts','public');
         }
@@ -50,47 +51,46 @@ class PostController extends Controller
             'excerpt'=>$request->excerpt,
             'content'=>$request->content,
             'featured_image'=>$image,
-            'status'=>'draft',
+            'status'=>$request->status,
             'user_id'=>auth()->id(),
             'category_id'=>$request->category_id,
+            'approved_by'=>$request->status=='published'
+                ? auth()->id()
+                : null,
+            'published_at'=>$request->status=='published'
+                ? now()
+                : null,
         ]);
 
         return redirect()
-            ->route('composer.posts.index')
-            ->with('success','Post saved as Draft.');
+            ->route('admin.posts.index')
+            ->with('success','Post created successfully.');
     }
 
     public function edit(Post $post)
     {
-        abort_if($post->user_id != auth()->id(),403);
-
-        if($post->status!='draft'){
-            abort(403,'Only draft posts can be edited.');
-        }
-
         $categories = Category::orderBy('name')->get();
 
-        return view('composer.posts.edit',compact('post','categories'));
+        return view('admin.posts.edit', compact('post','categories'));
     }
 
     public function update(Request $request, Post $post)
     {
-        abort_if($post->user_id != auth()->id(),403);
-
         $request->validate([
             'title'=>'required|max:255',
             'excerpt'=>'nullable|max:500',
             'content'=>'required',
             'featured_image'=>'nullable|image|max:2048',
             'category_id'=>'required|exists:categories,id',
+            'status'=>'required'
         ]);
 
         $image = $post->featured_image;
 
         if($request->hasFile('featured_image')){
 
-            if($image){
-                Storage::disk('public')->delete($image);
+            if($post->featured_image){
+                Storage::disk('public')->delete($post->featured_image);
             }
 
             $image = $request->file('featured_image')
@@ -103,35 +103,64 @@ class PostController extends Controller
             'excerpt'=>$request->excerpt,
             'content'=>$request->content,
             'featured_image'=>$image,
+            'status'=>$request->status,
             'category_id'=>$request->category_id,
+            'approved_by'=>$request->status=='published'
+                ? auth()->id()
+                : null,
+            'published_at'=>$request->status=='published'
+                ? now()
+                : null,
         ]);
 
         return redirect()
-            ->route('composer.posts.index')
-            ->with('success','Draft updated.');
+            ->route('admin.posts.index')
+            ->with('success','Post updated successfully.');
     }
 
     public function destroy(Post $post)
     {
-        abort_if($post->user_id != auth()->id(),403);
-
         if($post->featured_image){
             Storage::disk('public')->delete($post->featured_image);
         }
 
         $post->delete();
 
-        return back()->with('success','Post deleted.');
+        return back()->with('success','Post deleted successfully.');
     }
-
-    public function submit(Post $post)
+    public function approve(Post $post)
     {
-        abort_if($post->user_id != auth()->id(),403);
-
         $post->update([
-            'status'=>'pending'
+
+            'status' => 'published',
+
+            'approved_by' => auth()->id(),
+
+            'published_at' => now(),
+
         ]);
 
-        return back()->with('success','Post submitted for approval.');
+        return back()->with(
+            'success',
+            'Post approved successfully.'
+        );
+    }
+
+    public function reject(Post $post)
+    {
+        $post->update([
+
+            'status' => 'rejected',
+
+            'approved_by' => null,
+
+            'published_at' => null,
+
+        ]);
+
+        return back()->with(
+            'success',
+            'Post rejected.'
+        );
     }
 }
