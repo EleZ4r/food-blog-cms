@@ -201,21 +201,6 @@ public/
 
 ---
 
-## 📸 Screenshots
-
-Add screenshots here before submission.
-
-Example:
-
-- Homepage
-- Admin Dashboard
-- Composer Dashboard
-- Categories
-- Create Post
-- Published Post
-
----
-
 ## 📚 Course Information
 
 **Course:** Advanced Programming
