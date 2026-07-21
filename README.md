@@ -1,58 +1,241 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🍽️ Food Blog CMS
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A web-based **Food Blog Content Management System (CMS)** developed using **Laravel 13**. The system allows administrators to manage food-related articles, categories, and users, while composers can create and submit blog posts for approval before publication.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📖 Project Overview
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+The Food Blog CMS provides a centralized platform for publishing food-related content such as recipes, restaurant reviews, cooking tips, and food experiences. It follows a role-based workflow where composers submit articles and administrators review and publish them.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+This project was developed as the **Final Project** for the **Advanced Programming** course.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## ✨ Features
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Guest Users
+- Browse published food articles
+- Search posts by title
+- Filter posts by category
+- Read complete blog articles
+- View related posts
+- Like published posts
+- Comment on posts (authenticated users)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Composer
+- Secure login
+- Dashboard
+- Create new posts
+- Upload featured images
+- Save posts as Draft
+- Submit posts for approval
+- Edit and delete own posts
 
-## Agentic Development
+### Administrator
+- Dashboard with statistics
+- Manage blog posts
+- Approve or reject submitted posts
+- Manage categories
+- Manage user roles
+- Publish articles
+- Delete posts
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
+
+## 🛠️ Built With
+
+- Laravel 13
+- PHP 8.3+
+- MySQL
+- Blade Templates
+- Tailwind CSS
+- Laravel Breeze
+- Spatie Laravel Permission
+- CKEditor 5
+- Vite
+
+---
+
+## 🗄️ Database
+
+Main tables:
+
+- Users
+- Roles
+- Categories
+- Posts
+- Comments
+- Likes
+
+Relationships:
+
+- One User → Many Posts
+- One Category → Many Posts
+- One Post → Many Comments
+- One Post → Many Likes
+
+---
+
+## 🚀 Installation
+
+### Clone the repository
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/EleZ4r/food-blog-cms.git
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Open the project
 
-## Contributing
+```bash
+cd food-blog-cms
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Install PHP dependencies
 
-## Code of Conduct
+```bash
+composer install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Install Node dependencies
 
-## Security Vulnerabilities
+```bash
+npm install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Create the environment file
 
-## License
+```bash
+cp .env.example .env
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Generate the application key
+
+```bash
+php artisan key:generate
+```
+
+### Configure your database
+
+Update your `.env` file:
+
+```env
+DB_DATABASE=food_blog
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### Run migrations and seeders
+
+```bash
+php artisan migrate --seed
+```
+
+### Create the storage link
+
+```bash
+php artisan storage:link
+```
+
+### Build frontend assets
+
+```bash
+npm run dev
+```
+
+### Start the server
+
+```bash
+php artisan serve
+```
+
+Open:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+## 👥 User Roles
+
+### Administrator
+
+Can:
+
+- Manage users
+- Manage categories
+- Manage all posts
+- Approve or reject submitted posts
+- Publish articles
+
+### Composer
+
+Can:
+
+- Create posts
+- Upload images
+- Save drafts
+- Submit posts for approval
+- Edit own posts
+
+---
+
+## 📂 Project Structure
+
+```
+app/
+├── Http/
+│   └── Controllers/
+├── Models/
+resources/
+├── views/
+│   ├── admin/
+│   ├── composer/
+│   ├── layouts/
+│   └── auth/
+routes/
+database/
+public/
+```
+
+---
+
+## 📸 Screenshots
+
+Add screenshots here before submission.
+
+Example:
+
+- Homepage
+- Admin Dashboard
+- Composer Dashboard
+- Categories
+- Create Post
+- Published Post
+
+---
+
+## 📚 Course Information
+
+**Course:** Advanced Programming
+
+**Project:** Food Blog CMS
+
+---
+
+## 👨‍💻 Developers
+
+- John Eleazar S. Mamangun
+- Railey C. Aquino
+- Gwen Mae D. Barrozo
+- Maria Stephanie G. Chavez
+- Ken Aeron C. Daniega
+- John Paul A. Escario
+- Galileo U. Garcia
+
+---
+
+## 📄 License
+
+This project was developed for educational purposes as a final academic requirement.
