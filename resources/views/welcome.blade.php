@@ -15,7 +15,7 @@
                     Browse featured dishes, explore tasty categories, and read the freshest meals created by our community.
                 </p>
                 <div class="mt-10 flex flex-wrap gap-4">
-                    <a href="{{ route('login') }}" class="inline-flex items-center justify-center rounded-full bg-white px-8 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-orange-500/20 transition hover:bg-slate-100">
+                    <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-full bg-white px-8 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-orange-500/20 transition hover:bg-slate-100">
                         Join the community
                     </a>
                     <a href="#latest" class="inline-flex items-center justify-center rounded-full border border-white/30 px-8 py-3 text-sm font-semibold text-white/90 transition hover:border-white hover:text-white">
